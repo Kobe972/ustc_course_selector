@@ -17,5 +17,3 @@ def central_auth_login(driver):
 
 driver = webdriver.Chrome()
 central_auth_login(driver)
-select(driver)
-driver.close()
