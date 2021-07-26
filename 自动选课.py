@@ -10,14 +10,16 @@ import datetime
 
 student_no='PB20000000' #学号
 ustcmis_password='******' #密码
-req_timeout=12
+req_timeout=20 #隐式等待时限（秒）
 sel_time=12 #选课开放时间（时）
 courses=[] #课程号列表
 change_from=['MARX1003.11'] #要换的课程号
 change_to=['MARX1003.05'] #对应的目标课程号
 
+driver = webdriver.Chrome()
+driver.implicitly_wait(req_timeout)
+
 def central_auth_login(driver): #登录教务系统
-    driver.implicitly_wait(req_timeout)
     driver.get('https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fjw.ustc.edu.cn%2Fucas-sso%2Flogin')
     driver.find_element_by_name("username").send_keys(student_no)
     driver.find_element_by_name("password").send_keys(ustcmis_password)
@@ -49,12 +51,10 @@ def select(driver): #选课、换班，先换班后选课
         if driver.title=='本科生分层换班申请表': #处理申请表
             driver.find_element_by_id('applyReason').send_keys('比较喜欢这位老师的上课风格')
             driver.find_element_by_id('save-btn').click()
-            time.sleep(3)
             driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
             if driver.title=='本科生分层换班申请表':
                 driver.find_element_by_css_selector("[class='btn btn-default']").click()
         else:
-            time.sleep(3)
             driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
         if driver.title=='请选择新课堂':
             driver.find_element_by_xpath("//a[@class='btn btn-default']").click() #返回选课页面
@@ -69,11 +69,9 @@ def select(driver): #选课、换班，先换班后选课
         driver.find_element_by_id('global_filter').send_keys(course)
         driver.find_element_by_id('global_filter').send_keys(Keys.ENTER)
         driver.find_element_by_css_selector("[class='btn btn-primary course-select']").click()
-        time.sleep(3)
         driver.find_element_by_css_selector("[class='btn btn-default close-modal']").click()
         print('已经尝试选！',course)
 
-driver = webdriver.Chrome()
 central_auth_login(driver)
 select(driver)
 driver.close()
