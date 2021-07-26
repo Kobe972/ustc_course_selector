@@ -63,6 +63,15 @@ def select(driver): #选课、换班，先换班后选课
         driver.find_element_by_id('global_filter').send_keys(Keys.ENTER) #开始搜索要换班的课程
         driver.find_element_by_xpath("//div[@id='all-lessons']//button[@class='btn btn-primary dropdown-toggle']").click() #点击换班按钮
         driver.find_element_by_link_text('单课换班').click()
+        if driver.title!='请选择新课堂':
+            while driver.title!='请选择新课堂':
+                driver.get(addr)
+                driver.find_element_by_css_selector("[class='btn btn-default close-modal bulletin-prompt']").click() #点击提示页面的确定按钮，如果已经选择不再提示，则去掉这一行代码以及后面相同的代码
+                driver.find_element_by_link_text('全部课程').click()
+                driver.find_element_by_id('global_filter').clear()
+                driver.find_element_by_id('global_filter').send_keys(change_from[i])
+                driver.find_element_by_id('global_filter').send_keys(Keys.ENTER) #开始搜索要换班的课程
+                driver.find_element_by_xpath("//div[@id='all-lessons']//button[@class='btn btn-primary dropdown-toggle']").click() #点击换班按钮
         driver.find_element_by_id('lessonCode-filter').clear() #清空输入框
         driver.find_element_by_id('lessonCode-filter').send_keys(change_to[i]) #输入要换到的课程号
         driver.find_element_by_id('filter-btn').click()
@@ -75,12 +84,9 @@ def select(driver): #选课、换班，先换班后选课
                 driver.find_element_by_css_selector("[class='btn btn-default']").click()
         else:
             driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
-        if driver.title=='请选择新课堂':
-            driver.find_element_by_xpath("//a[@class='btn btn-default']").click() #返回选课页面
-            addr=driver.find_element_by_link_text('进入选课').get_attribute('href')
-            driver.get(addr)
-            driver.find_element_by_css_selector("[class='btn btn-default close-modal bulletin-prompt']").click()
-            driver.find_element_by_link_text('全部课程').click()
+        driver.get(addr)
+        driver.find_element_by_css_selector("[class='btn btn-default close-modal bulletin-prompt']").click()
+        driver.find_element_by_link_text('全部课程').click()
         print('已经尝试把',change_from[i],'换为',change_to[i])
     if(len(change_from)!=0):
         print('换班结束！')
