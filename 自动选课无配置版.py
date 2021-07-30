@@ -79,9 +79,6 @@ def select(driver): #选课、换班，先换班后选课
         if driver.title=='本科生分层换班申请表': #处理申请表
             driver.find_element_by_id('applyReason').send_keys('比较喜欢这位老师的上课风格')
             driver.find_element_by_id('save-btn').click()
-            driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
-            if driver.title=='本科生分层换班申请表':
-                driver.find_element_by_css_selector("[class='btn btn-default']").click()
         else:
             driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
         driver.get(addr)

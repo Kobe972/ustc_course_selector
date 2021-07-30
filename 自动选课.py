@@ -15,6 +15,7 @@ sel_time=12 #选课开放时间（时）
 courses=[] #课程号列表
 change_from=['MARX1003.11'] #要换的课程号
 change_to=['MARX1003.05'] #对应的目标课程号
+reason='期望通过这门课的学习，对人生对社会写成一个较深刻的认识。知道老师的口碑评价非常好，特别希望能有机会听到老师的课。'
 
 driver = webdriver.Chrome()
 driver.implicitly_wait(req_timeout)
@@ -58,11 +59,8 @@ def select(driver): #选课、换班，先换班后选课
         driver.find_element_by_id('filter-btn').click()
         driver.find_element_by_xpath("//tr[not(@class)]//button[@class='btn btn-primary change-class']").click()
         if driver.title=='本科生分层换班申请表': #处理申请表
-            driver.find_element_by_id('applyReason').send_keys('比较喜欢这位老师的上课风格')
+            driver.find_element_by_id('applyReason').send_keys(reason)
             driver.find_element_by_id('save-btn').click()
-            driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
-            if driver.title=='本科生分层换班申请表':
-                driver.find_element_by_css_selector("[class='btn btn-default']").click()
         else:
             driver.find_element_by_css_selector("[data-bb-handler='ok']").click()
         driver.get(addr)
@@ -80,4 +78,4 @@ def select(driver): #选课、换班，先换班后选课
 
 central_auth_login(driver)
 select(driver)
-driver.close()
+#driver.close()
