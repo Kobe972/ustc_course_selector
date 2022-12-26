@@ -8,14 +8,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import datetime
 
-student_no='PB21111' #学号
-ustcmis_password='12334z' #密码
+student_no='PB21111706' #学号
+ustcmis_password='159' #密码
 req_timeout=20 #隐式等待时限（秒）
 sel_time=12 #选课开放时间（时）
 courses=[] #课程号列表
-change_from=['MARX1003.11'] #要换的课程号
-change_to=['MARX1003.05'] #对应的目标课程号
-reason='期望通过这门课的学习，对人生对社会写成一个较深刻的认识。知道老师的口碑评价非常好，特别希望能有机会听到老师的课。'
+change_from=['PHYS1010.05'] #要换的课程号
+change_to=['PHYS1010.01'] #对应的目标课程号
+reason='期望通过这门课的学习，对相关知识形成一个较深刻的认识。知道老师的口碑评价非常好，特别希望能有机会听到老师的课。'
 
 driver = webdriver.Edge()
 driver.implicitly_wait(req_timeout)
@@ -24,7 +24,10 @@ def central_auth_login(driver): #登录教务系统
     driver.get('https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fjw.ustc.edu.cn%2Fucas-sso%2Flogin')
     driver.find_element(By.NAME,"username").send_keys(student_no)
     driver.find_element(By.NAME,"password").send_keys(ustcmis_password)
-    driver.find_element(By.NAME,"button").click()
+    #等待输入验证码
+    while True:
+        if driver.title=='中国科学技术大学综合教务系统':
+            break
     print('已登录')
 
 def select(driver): #选课、换班，先换班后选课
